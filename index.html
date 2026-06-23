@@ -284,7 +284,7 @@ function sendSMS(){
     const a = document.createElement('a');
     
     // 2人以上の複数人に同時に送る場合はカンマ「,」で電話番号を繋ぎます
-    a.href = "sms:09085950696,090XXXXXXXX?body=" + encodeURIComponent(text);
+    a.href = "sms:09085950696?body=" + encodeURIComponent(text);
     
     a.click();
 }
