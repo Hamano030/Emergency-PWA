@@ -209,10 +209,12 @@ function createMessage(){
 
     let mapUrl="なし";
 
+    // ▽▽▽ ここを世界共通の確実なGoogleマップURL形式に修正しました ▽▽▽
     if(lat!=="" && lon!==""){
         mapUrl=
         "https://google.com"+lat+","+lon;
     }
+    // △△△ 修正ここまで △△△
 
     const text=
 `【緊急連絡】
