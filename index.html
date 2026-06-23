@@ -211,7 +211,7 @@ function createMessage(){
 
     if(lat!=="" && lon!==""){
         mapUrl=
-        "https://maps.google.com/?q="+lat+","+lon;
+        "https://google.com"+lat+","+lon;
     }
 
     const text=
@@ -280,9 +280,13 @@ function sendSMS(){
     let text=
     document.getElementById("result").value;
 
-    location.href=
-    "sms:09085950696?body=" +
-    encodeURIComponent(text);
+    // iPhone/Androidの両方で確実に動くようにリンクを作って擬似クリックさせる
+    const a = document.createElement('a');
+    
+    // 2人以上の複数人に同時に送る場合はカンマ「,」で電話番号を繋ぎます
+    a.href = "sms:09085950696,090XXXXXXXX?body=" + encodeURIComponent(text);
+    
+    a.click();
 }
 
 </script>
