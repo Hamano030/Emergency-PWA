@@ -3,19 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>緊急連絡システム</title>
+
 <link rel="manifest" href="manifest.json">
+
 <style>
-body{font-family:sans-serif;margin:10px;max-width:800px;}
-h2{text-align:center;}
-label{display:block;margin-top:10px;font-weight:bold;}
-input,select,textarea{width:100%;padding:10px;box-sizing:border-box;font-size:16px;}
-button{width:100%;padding:15px;margin-top:10px;font-size:18px;}
-#createBtn{background:#1976d2;color:white;}
-#sendBtn{background:#d32f2f;color:white;}
-#copyBtn{background:#388e3c;color:white;}
-textarea{height:250px;}
+
+body{
+    font-family:sans-serif;
+    margin:10px;
+    max-width:800px;
+}
+
+h2{
+    text-align:center;
+}
+
+label{
+    display:block;
+    margin-top:10px;
+    font-weight:bold;
+}
+
+input,select,textarea{
+    width:100%;
+    padding:10px;
+    box-sizing:border-box;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    margin-top:10px;
+    font-size:18px;
+}
+
+#createBtn{
+    background:#1976d2;
+    color:white;
+}
+
+#sendBtn{
+    background:#d32f2f;
+    color:white;
+}
+
+#copyBtn{
+    background:#388e3c;
+    color:white;
+}
+
+textarea{
+    height:250px;
+}
+
 </style>
+
 </head>
 <body>
 
@@ -33,7 +78,9 @@ textarea{height:250px;}
 <label>経度</label>
 <input id="lon" readonly>
 
-<button onclick="getLocation()">GPS再取得</button>
+<button onclick="getLocation()">
+GPS再取得
+</button>
 
 <label>現場名</label>
 <input id="genba">
@@ -88,38 +135,65 @@ textarea{height:250px;}
 <option>本田茂徳</option>
 </select>
 
-<button id="createBtn" onclick="createMessage()">連絡文作成</button>
-<button id="copyBtn" onclick="copyMessage()">コピー</button>
-<button id="sendBtn" onclick="sendSMS()">事務所へ送信</button>
+<button id="createBtn" onclick="createMessage()">
+連絡文作成
+</button>
+
+<button id="copyBtn" onclick="copyMessage()">
+コピー
+</button>
+
+<button id="sendBtn" onclick="sendSMS()">
+浜野へ送信
+</button>
 
 <h3>送信内容</h3>
-<textarea id="result" readonly></textarea>
+
+<textarea id="result"></textarea>
 
 <script>
+
 if("serviceWorker" in navigator){
     navigator.serviceWorker.register("service-worker.js");
 }
 
 window.onload=function(){
+
     const now=new Date();
-    document.getElementById("datetime").value=now.toLocaleString("ja-JP");
+
+    document.getElementById("datetime").value=
+    now.toLocaleString("ja-JP");
+
     getLocation();
 }
 
 function getLocation(){
+
     document.getElementById("gpsStatus").value="取得中";
 
     navigator.geolocation.getCurrentPosition(
+
         function(position){
+
             document.getElementById("gpsStatus").value="取得成功";
-            document.getElementById("lat").value=position.coords.latitude.toFixed(6);
-            document.getElementById("lon").value=position.coords.longitude.toFixed(6);
+
+            document.getElementById("lat").value=
+            position.coords.latitude.toFixed(6);
+
+            document.getElementById("lon").value=
+            position.coords.longitude.toFixed(6);
+
         },
+
         function(){
+
             document.getElementById("gpsStatus").value="取得失敗";
+
             document.getElementById("lat").value="";
             document.getElementById("lon").value="";
+
         },
+
         {
             enableHighAccuracy:true,
             timeout:10000,
@@ -136,10 +210,12 @@ function createMessage(){
     let mapUrl="なし";
 
     if(lat!=="" && lon!==""){
-        mapUrl="https://maps.google.com/?q="+lat+","+lon;
+        mapUrl=
+        "https://maps.google.com/?q="+lat+","+lon;
     }
 
-    const text=`【緊急連絡】
+    const text=
+`【緊急連絡】
 
 発信：新潟班
 
@@ -189,7 +265,11 @@ ${document.getElementById("reporter").value}`;
 }
 
 function copyMessage(){
-    navigator.clipboard.writeText(document.getElementById("result").value);
+
+    navigator.clipboard.writeText(
+        document.getElementById("result").value
+    );
+
     alert("コピーしました");
 }
 
@@ -197,22 +277,14 @@ function sendSMS(){
 
     createMessage();
 
-    const text=document.getElementById("result").value;
+    let text=
+    document.getElementById("result").value;
 
-    // 送信先（将来2人目の番号を実番号に変更してください）
-    const phone1="09085950696";
-    const phone2="090XXXXXXXX";
-
-    const recipients=phone1;
-
-    const ua=navigator.userAgent;
-
-    if(/iPhone|iPad|iPod/i.test(ua)){
-        window.location.href="sms:"+recipients+"&body="+encodeURIComponent(text);
-    }else{
-        window.location.href="sms:"+recipients+"?body="+encodeURIComponent(text);
-    }
+    location.href=
+    "sms:09085950696?body=" +
+    encodeURIComponent(text);
 }
+
 </script>
 
 </body>
